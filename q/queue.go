@@ -1,7 +1,7 @@
 package q
 
 type Queuer interface {
-	Enqueue() error
+	Enqueue(interface{}) error
 	Dequeueue() (interface{}, error)
 	Len() int
 }

@@ -41,4 +41,8 @@ flight will be served first.
 
 * Let's define a Queue interface
 
-.code queue.go /^package/,/^}/
+.code q/queue.go /^package/,/^}/
+
+* Let's also define a FIFO type
+
+.code q/fifo.go 
