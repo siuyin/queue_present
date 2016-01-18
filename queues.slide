@@ -108,6 +108,39 @@ We could service the multiple queues using:
 
 - Round Robin
 - Earliest Deadline First
-- Fair Queue
+- Shortest/Easiest Jobs First
+- Fair Queueing
 
 
+* Round Robin
+
+Server draws from each queue one at a time.
+If a queue is empty it is skipped.
+
+Similar to First-Come First-Served philosophy.
+
+All queues get an equal chance of being serviced.
+
+* Earliest Deadline First
+
+The head element of all queues are scanned for their
+individual deadlines.
+
+The queue with the earliest deadline is serviced,
+then the queues are scanned again.
+
+Advantage: Last-minute jobs get done
+Conversely jobs with long-term deadlines have to
+wait a very long time to run.
+
+* Shortest / Easiest Jobs first
+
+The head element of all queues are scanned for their
+estimated job length / difficulty.
+
+The queue having the shortest job length / easiest complexity
+is serviced,
+then the queues are sccanned again.
+
+Advantage: Short / easy jobs get run often
+Conversely Long / hard jobs may never get to run.
