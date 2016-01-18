@@ -1,5 +1,6 @@
 package q
 
+// 01 OMIT
 type FIFO struct {
 	s []interface{}
 }
@@ -10,30 +11,33 @@ func NewFIFO() *FIFO {
 	return f
 }
 
-func (e *FIFO) Enqueue(i interface{}) error {
+// 02 OMIT
+func (e *FIFO) Enqueue(i interface{}) error { // HL01
 	e.s = append(e.s, i)
 	return nil
 }
-
-func (e *FIFO) Dequeue() (interface{}, error) {
+// 05 OMIT
+func (e *FIFO) Dequeue() (interface{}, error) { // HL01
 	if e.Len() == 0 {
-		return nil, &QError{1, "Queue is empty"}
+		return nil, &QError{1, "Queue is empty"} // HL02
 	}
 	v := e.s[0]
-	e.s[0] = nil
+	e.s[0] = nil 			// prevents memory leak
 	e.s = e.s[1:]
 	return v, nil
 }
-
-func (e FIFO) Len() int {
+// 06 OMIT
+func (e FIFO) Len() int { // HL01
 	return len(e.s)
 }
 
-type QError struct {
+// 03 OMIT
+type QError struct { // HL02
 	I int
 	M string
 }
 
-func (e QError) Error() string {
+func (e QError) Error() string { // HL02
 	return e.M
 }
+// 07 OMIT
