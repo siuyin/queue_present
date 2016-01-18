@@ -6,9 +6,7 @@ Loh Siu Yin
 Technology Consultant, Beyond Broadcast LLP
 siuyin@beyondbroadcast.com
 
-* Types of Queues
-
-More accurately types of queue ordering.
+* Queue Types / Ordering / Discipline
 
 * First-In First-Out (FIFO)
 
@@ -61,6 +59,7 @@ empty interface.
 .code q/fifo_test.go /01 OMIT/,/02 OMIT/ HL01
 
 Switch over to a terminal window and
+
   go test
   
 * Testing FIFO Enqueue and Dequeue (1)
@@ -87,5 +86,28 @@ satisfies the go error interface.
 In our FIFO implementation:
 
 .code q/fifo.go /05 OMIT/,/06 OMIT/ HL02
+
+* A priority queue implementation
+
+The go standard library package
+
+  container/heap
+
+provides an implementation of a priority queue.
+
+I leave this as an exercise for you.
+
+* Multiple Queues
+
+* Multiple Queue Servicing
+
+Consider the situation where we have multiple queues
+feeding into one server.
+
+We could service the multiple queues using:
+
+- Round Robin
+- Earliest Deadline First
+- Fair Queue
 
 
