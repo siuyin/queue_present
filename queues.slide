@@ -144,3 +144,20 @@ then the queues are sccanned again.
 
 Advantage: Short / easy jobs get run often
 Conversely Long / hard jobs may never get to run.
+
+* Fair Queueing
+
+Priciple is each queue will get a fair-share of resources.
+
+Eg. If we have two queues:
+(A) having 5 jobs of 2 minutes each
+(B) having 2 jobs of 5 minutes each
+
+Then both queues should empty / clear at about the same time.
+
+Concepts: 
+
+- each job or queue item has a time cost and thus an estimated finish time
+- each queue has a finish time = finish time of last job in the queue
+
+

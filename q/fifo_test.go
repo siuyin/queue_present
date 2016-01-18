@@ -23,6 +23,7 @@ func TestEnqueue(t *testing.T) {
 		t.Error("enqueue failed")
 	}
 }
+
 // 03 OMIT
 func TestDequeueEmpty(t *testing.T) {
 	qu := NewFIFO()
@@ -31,6 +32,7 @@ func TestDequeueEmpty(t *testing.T) {
 		t.Error("should have errored")
 	}
 }
+
 // 04 OMIT
 func TestDequeue(t *testing.T) {
 	qu := NewFIFO()
@@ -40,19 +42,21 @@ func TestDequeue(t *testing.T) {
 		t.Error("dequeue failed")
 	}
 }
+
 // 05 OMIT
 func TestDequeue2(t *testing.T) {
 	qu := NewFIFO()
 	qu.Enqueue(1) // HL03
-	qu.Enqueue("boy") 
+	qu.Enqueue("boy")
 	o, _ := qu.Dequeue()
 	if o.(int) != 1 { // HL03
 		t.Error("dequeue failed")
 	}
-	
+
 	o, _ = qu.Dequeue()
-	if o.(string) != "boy" { 
+	if o.(string) != "boy" {
 		t.Error("dequeue failed")
 	}
 }
+
 // 06 OMIT
