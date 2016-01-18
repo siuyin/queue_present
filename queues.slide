@@ -56,13 +56,36 @@ empty interface.
 
 .code q/fifo.go /02 OMIT/,/03 OMIT/ HL01 
 
-* Handle some error conditions for our FIFO Queue
+* Let's do some testing
 
-.code q/fifo.go /03 OMIT/,/07 OMIT/ HL02
+.code q/fifo_test.go /01 OMIT/,/02 OMIT/ HL01
+
+Switch over to a terminal window and
+  go test
+  
+* Testing FIFO Enqueue and Dequeue (1)
+
+.code q/fifo_test.go /04 OMIT/,/05 OMIT/ HL02
+
+Note we can enqueue any data type Eg. 2 is an integer.
+When we dequeue, we need a type assertion o.(int) 
+
+* Testing FIFO Enqueue and Dequeue (2)
+
+.code q/fifo_test.go /05 OMIT/,/06 OMIT/ HL03
+
+This tests the First-In First-Out behaviour
+and also acceptance of interface{} .
+
+* Handle some error conditions for our FIFO Queue
 
 Any type with an Error() method returning a string
 satisfies the go error interface.
 
+.code q/fifo.go /03 OMIT/,/07 OMIT/ HL02
+
+In our FIFO implementation:
+
 .code q/fifo.go /05 OMIT/,/06 OMIT/ HL02
 
-* 
+
