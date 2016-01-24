@@ -34,7 +34,7 @@ flight will be served first.
 * But first some operations
 
 - Enqueue -- join the queue
-- Dequeue -- remove from the queue so that he / she can be served
+- Dequeue -- remove from the queue so that the job can be served
 - Head -- inspect (not remove) head of the queue
 - Len -- number of items currently in the queue
 
@@ -48,10 +48,10 @@ flight will be served first.
 
 Our FIFO queue internally (notice lower-cased s) has a slice of interface{}.
 
-i.e. any data type -- because all data times satisfy the
+i.e. any data type -- because all data types satisfy the
 empty interface.
 
-* Provide methods so that FIFO statisfies the Queue interface
+* Provide methods for FIFO to statisfy the Queue interface
 
 .code q/fifo.go /02 OMIT/,/03 OMIT/ HL01 
 
@@ -86,7 +86,7 @@ satisfies the go error interface.
 
 In our FIFO implementation:
 
-.code q/fifo.go /05 OMIT/,/06 OMIT/ HL02
+.code q/fifo.go /05 OMIT/,/05a OMIT/ HL02
 
 * A priority queue implementation
 
@@ -105,9 +105,9 @@ I leave this as an exercise for you.
 Consider the situation where we have multiple queues
 feeding into one server or a set of servers.
 
-We often encounter this situation in load balancers.
+We often encounter this situation in *load*balancers*.
 
-We could service the multiple queues using:
+We can service multiple queues using:
 
 - Round Robin
 - Earliest Deadline First
@@ -149,7 +149,7 @@ estimated job length / difficulty.
 
 The queue having the shortest job length / easiest complexity
 is serviced,
-then the queues are sccanned again.
+then the queues are scanned again.
 
 Advantage: Short / easy jobs get run often
 Conversely Long / hard jobs may never get to run.
@@ -266,8 +266,11 @@ We have only j1 in the queue.
 The second send() attempt should result in an 
 idle job.
 
-* Running the Test
+* Running the tests
 
 Switch to a terminal:
 
   go test
+
+* Presentation and code
+.link http://github.com/siuyin/queue_present
