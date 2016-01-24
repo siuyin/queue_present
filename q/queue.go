@@ -1,6 +1,6 @@
 package q
 
-type Queuer interface {
+type Queue interface {
 	Enqueue(interface{}) error
 	Dequeueue() (interface{}, error)
 	Head() (interface{}, error)
