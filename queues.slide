@@ -282,3 +282,7 @@ Switch to a terminal:
 
 * Presentation and code
 .link http://github.com/siuyin/queue_present
+
+Get the go present tool:
+
+ go get golang.org/x/tools/cmd/present
