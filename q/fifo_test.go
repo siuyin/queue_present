@@ -60,3 +60,13 @@ func TestDequeue2(t *testing.T) {
 }
 
 // 06 OMIT
+
+func TestDequeueOverflow(t *testing.T) {
+	qu := NewFIFO()
+	qu.Enqueue(1)
+	_, e := qu.Dequeue()
+	_, e = qu.Dequeue()
+	if e == nil {
+		t.Error("should have errored")
+	}
+}

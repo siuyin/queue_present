@@ -1,6 +1,6 @@
 Queueing with Go
 FIFO, Round-Robin and Beyond
-14 Jan 2016
+24 Jan 2016
 
 Loh Siu Yin
 Technology Consultant, Beyond Broadcast LLP
@@ -35,19 +35,20 @@ flight will be served first.
 
 - Enqueue -- join the queue
 - Dequeue -- remove from the queue so that he / she can be served
+- Head -- inspect (not remove) head of the queue
 - Len -- number of items currently in the queue
 
 * Let's define a Queue interface
 
 .code q/queue.go /^package/,/^}/
 
-* Let's also define a FIFO type
+* Let's also define a FIFO queue type
 
 .code q/fifo.go /01 OMIT/,/02 OMIT/
 
 Our FIFO queue internally (notice lower-cased s) has a slice of interface{}.
 
-i.e. any data type as all data times satisfy the
+i.e. any data type -- because all data times satisfy the
 empty interface.
 
 * Provide methods so that FIFO statisfies the Queue interface
@@ -102,7 +103,9 @@ I leave this as an exercise for you.
 * Multiple Queue Servicing
 
 Consider the situation where we have multiple queues
-feeding into one server.
+feeding into one server or a set of servers.
+
+We often encounter this situation in load balancers.
 
 We could service the multiple queues using:
 
@@ -114,12 +117,18 @@ We could service the multiple queues using:
 
 * Round Robin
 
-Server draws from each queue one at a time.
+Server(s) draws from each queue one at a time.
 If a queue is empty it is skipped.
 
 Similar to First-Come First-Served philosophy.
 
 All queues get an equal chance of being serviced.
+Thus it is fair in terms of the _number_ of jobs serviced.
+
+_Long_ jobs have the same priority as _short_ jobs...
+Imagine your job is to "ta-pau" one packet of chicken rice
+while the two in front of you are to "ta-pau" 10 and 20
+packets of chicken rice respectively.
 
 * Earliest Deadline First
 
@@ -145,6 +154,11 @@ then the queues are sccanned again.
 Advantage: Short / easy jobs get run often
 Conversely Long / hard jobs may never get to run.
 
+"ta-pau" one packet fast,
+"ta-pau" 10 packets slow...
+
+How can we ensure "fairness"?
+
 * Fair Queueing
 
 Priciple is each queue will get a fair-share of resources.
@@ -160,4 +174,100 @@ Concepts:
 - each job or queue item has a time cost and thus an estimated finish time
 - each queue has a finish time = finish time of last job in the queue
 
+* Psuedo-code on Wikipedia
+.image fair_queue_wikipedia.png
 
+* First try at an implementation
+
+.code q/fair_q.go /01 OMIT/,/02 OMIT/
+
+This implementation has N queues -- think Immigration Clearance at Airports.
+
+Each queue is a FIFO.
+
+And we keep a list of the last virtual finish time of a job in each of the queues. 
+i.e. the predicted / estimated time the latest job in a particular queue would complete
+
+* Receiving a Job into the system
+.image receive_wik.png
+
+.code q/fair_q.go /02 OMIT/,/03 OMIT/  HL01
+
+packet == Job
+
+Notice I'm using the Queue interface's Enqueue method to enqueue job _j_.
+
+Customize chooseQueue to your needs to maps incoming jobs to your
+set of *N* queues.
+
+* chooseQueue is a mapping from Job to queue number
+In practice it could be based on customer name or id
+or passport nationality 
+or some specific property of the Job
+
+In my test implementation I choose to always map to queue number 1.
+
+.code q/fair_q.go /03 OMIT/,/04 OMIT/ 
+
+* Updating estimated (virtual) finish time
+
+.image update_time_wik.png
+
+.code q/fair_q.go /04 OMIT/,/05 OMIT/ HL01
+
+Finish time is greater of ( now and last job's finish time)
+plus current job's time cost.
+ 
+* Select and send a job to be processed
+
+.image send_wik.png
+
+.code q/fair_q.go /05 OMIT/,/06 OMIT/ HL01
+
+The heart of the send function is selectQueue,
+that is were the fair queueing comes in.
+
+The rest of *send* is just a FIFO Dequeue.
+
+* Fairly selectQueue
+
+.image select_queue_wik.png
+
+The main ideas:
+
+- skip empty queues
+- select the queue with earliest estimated finish time
+
+This effectively is First-Come, First-Served weighted by the Job cost.
+
+* selectQueue Go implementation
+
+.code q/fair_q.go /06 OMIT/,/07 OMIT/ HL01
+
+* Testing the Fair Queue - Update Time 
+
+.code q/fair_q_test.go /ut1 OMIT/,/ut2 OMIT/ 
+
+FakeClock Now() is always 2000-01-01 00:00:00 UTC
+
+* Testing Fair Queue send() 
+
+.code q/fair_q_test.go /01 OMIT/,/02 OMIT/
+
+We have j1 and j2 in the queue and they should be
+FIFO dequeued
+
+* Testing the Fair Queue send() underflow 
+
+.code q/fair_q_test.go /02 OMIT/,/03 OMIT/
+
+We have only j1 in the queue.
+
+The second send() attempt should result in an 
+idle job.
+
+* Running the Test
+
+Switch to a terminal:
+
+  go test

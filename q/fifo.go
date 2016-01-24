@@ -28,9 +28,9 @@ func (e *FIFO) Dequeue() (interface{}, error) { // HL01
 	return v, nil
 }
 
-func (e *FIFO) Head() (interface{}, error) {
+func (e *FIFO) Head() (interface{}, error) { // HL01
 	if e.Len() == 0 {
-		return nil, &QError("Queue is empty")
+		return nil, &QError{"Queue is empty"}
 	}
 	return e.s[0], nil
 }
