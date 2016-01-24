@@ -127,7 +127,7 @@ Thus it is fair in terms of the _number_ of jobs serviced.
 
 _Long_ jobs have the same priority as _short_ jobs...
 Imagine your job is to "ta-pau" one packet of chicken rice
-while the two in front of you are to "ta-pau" 10 and 20
+while the two beside you are to "ta-pau" 10 and 20
 packets of chicken rice respectively.
 
 * Earliest Deadline First
@@ -161,7 +161,7 @@ How can we ensure "fairness"?
 
 * Fair Queueing
 
-Priciple is each queue will get a fair-share of resources.
+Principle is each queue will get a fair-share of resources.
 
 Eg. If we have two queues:
 (A) having 5 jobs of 2 minutes each
@@ -197,7 +197,7 @@ packet == Job
 
 Notice I'm using the Queue interface's Enqueue method to enqueue job _j_.
 
-Customize chooseQueue to your needs to maps incoming jobs to your
+Customize *chooseQueue* to your needs to maps incoming jobs to your
 set of *N* queues.
 
 * chooseQueue is a mapping from Job to queue number
@@ -208,6 +208,14 @@ or some specific property of the Job
 In my test implementation I choose to always map to queue number 1.
 
 .code q/fair_q.go /03 OMIT/,/04 OMIT/ 
+
+A real implementation would use a hashing function like
+
+ hash/fnv
+
+available from the standard library.
+
+
 
 * Updating estimated (virtual) finish time
 

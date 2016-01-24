@@ -1,6 +1,7 @@
 package q
 
 import (
+	"hash/fnv"
 	"testing"
 	"time"
 )
@@ -119,3 +120,37 @@ func TestSendUnderflow(t *testing.T) {
 }
 
 // 03 OMIT
+
+func TestFnvTable(t *testing.T) {
+	dat := []struct {
+		i string
+		o uint32
+	}{
+		{"a", 6}, {"b", 5}, {"c", 4},
+		{"A", 4}, {"B", 3}, {"C", 2}, {"D", 1}, {"E", 0},
+		{"j01", 8}, {"j02", 1}, {"j03", 0},
+	}
+	h := fnv.New32()
+	for _, v := range dat {
+		h.Reset()
+		h.Write([]byte(v.i))
+		if r := h.Sum32() % N; r != v.o {
+			t.Errorf("%s hash should be %d got %d\n", v.i, v.o, r)
+		}
+	}
+}
+func TestFnvTable2(t *testing.T) {
+	dat := []struct {
+		i string
+		o int
+	}{
+		{"a", 6}, {"b", 5}, {"c", 4},
+		{"A", 4}, {"B", 3}, {"C", 2}, {"D", 1}, {"E", 0},
+		{"j01", 8}, {"j02", 1}, {"j03", 0},
+	}
+	for _, v := range dat {
+		if r := fnvh(v.i, N); r != v.o {
+			t.Errorf("%s hash should be %d got %d\n", v.i, v.o, r)
+		}
+	}
+}

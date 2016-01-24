@@ -3,6 +3,7 @@ package q
 // re-implement from algorithm
 
 import (
+	"hash/fnv"
 	"time"
 )
 
@@ -97,4 +98,9 @@ func max(a, b time.Time) time.Time {
 	} else {
 		return a
 	}
+}
+func fnvh(s string, n int) int {
+	h := fnv.New32()
+	h.Write([]byte(s))
+	return int(h.Sum32()) % n
 }
