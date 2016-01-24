@@ -61,7 +61,7 @@ empty interface.
 
 Switch over to a terminal window and
 
-  go test
+  go test -v -run Len 
   
 * Testing FIFO Enqueue and Dequeue (1)
 
