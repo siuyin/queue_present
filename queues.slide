@@ -88,6 +88,15 @@ In our FIFO implementation:
 
 .code q/fifo.go /05 OMIT/,/05a OMIT/ HL02
 
+* You could just use errors.New
+
+  import "errors"
+  
+  err := errors.New("something went wrong with the queue")
+
+A matter of preference between using errors directly or
+defining your own Errors type.
+
 * A priority queue implementation
 
 The go standard library package
